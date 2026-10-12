@@ -2,7 +2,7 @@
 
 维护 PiliPlus macOS / iOS 的本地 AV1 VideoToolbox 修复、实时下载速度与缓冲显示，以及构建和验证记录。**这是非官方补丁仓库**，基线是 PiliPlus Release `2.1.6.2` 的 `2.1.6+5472` 发行包。
 
-上游：[PiliPlus](https://github.com/bggRGjQaUbCoE/PiliPlus)。已有 macOS 问题报告：[PiliPlus #3252](https://github.com/bggRGjQaUbCoE/PiliPlus/issues/3252)。
+上游：[PiliPlus](https://github.com/bggRGjQaUbCoE/PiliPlus)。已有 macOS 问题报告：[PiliPlus #3252](https://github.com/bggRGjQaUbCoE/PiliPlus/issues/3252)。 本次 iOS 硬解与实时网速功能反馈：[PiliPlus #3260](https://github.com/bggRGjQaUbCoE/PiliPlus/issues/3260)。
 
 ## 当前状态
 
