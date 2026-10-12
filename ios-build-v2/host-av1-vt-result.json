@@ -1,0 +1,8 @@
+{
+  "platform": "macOS arm64 (patch component test, not iOS app test)",
+  "avcodec_version": "61.3.100",
+  "hardware_required": true,
+  "frames_decoded": 64,
+  "hardware_frames": 64,
+  "returncode": 0
+}

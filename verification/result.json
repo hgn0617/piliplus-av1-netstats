@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-12",
+  "machine": "Apple M4 / macOS 15.5",
+  "installed_app": "${PATCHED_MAC_APP}",
+  "original_app_unchanged": true,
+  "native_sample_test": {
+    "source": "https://fate-suite.ffmpeg.org/av1/seq_hdr_op_param_info.ivf",
+    "codec": "AV1",
+    "hwdec_current": "videotoolbox-copy",
+    "decoder_frame_drop_count": 0,
+    "playback_time_advanced": true
+  },
+  "in_app_test": {
+    "video": "BV1qM4y1w716",
+    "title": "【8K演示片】B站首发！你的设备还顶得住吗？",
+    "selected_format": "AV1",
+    "selected_quality": "8K",
+    "reported_resolution": "8192x4320",
+    "pixel_format": "videotoolbox",
+    "hardware_pixel_format": "nv12",
+    "hwdec": "videotoolbox",
+    "video_rendered": true
+  },
+  "known_limitations": [
+    "Playback information AudioTrack/VideoTrack details display auto/null with the updated runtime; VideoParams and hwdec are available.",
+    "No exhaustive regression test of all PiliPlus features.",
+    "Official app updates can replace the locally patched runtime."
+  ]
+}

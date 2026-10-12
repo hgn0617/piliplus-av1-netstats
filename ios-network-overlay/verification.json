@@ -1,0 +1,20 @@
+{
+  "controlled_http_read_rate_positive": true,
+  "video_progresses": true,
+  "av1_hardware_decode_preserved": true,
+  "toggle_messages_pass": true,
+  "font_size_messages_pass": true,
+  "four_corner_messages_pass": true,
+  "audio_only_and_local_video_overlay_hidden": true,
+  "test_scope": "Same native iOS bridge source compiled on macOS; not an iPhone runtime test",
+  "preview_size": [
+    1280,
+    720
+  ],
+  "last_snapshot": {
+    "hwdec-current": "videotoolbox-copy",
+    "time-pos": "4.713042",
+    "user-data/piliplus-network/bytes_per_second": "46245.000000",
+    "user-data/piliplus-network/buffered_seconds": "2.168833"
+  }
+}

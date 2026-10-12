@@ -1,0 +1,20 @@
+[
+  "../ffmpeg-7.0.2/configure",
+  "--disable-autodetect",
+  "--disable-all",
+  "--enable-small",
+  "--disable-x86asm",
+  "--disable-debug",
+  "--enable-static",
+  "--disable-shared",
+  "--enable-avcodec",
+  "--enable-avutil",
+  "--enable-pthreads",
+  "--enable-videotoolbox",
+  "--enable-decoder=av1,h264,hevc,aac",
+  "--enable-hwaccel=av1_videotoolbox,h264_videotoolbox,hevc_videotoolbox",
+  "--cc=clang",
+  "--sysroot=/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk",
+  "--extra-cflags=-arch arm64 -mmacosx-version-min=15.0",
+  "--extra-ldflags=-arch arm64 -mmacosx-version-min=15.0"
+]

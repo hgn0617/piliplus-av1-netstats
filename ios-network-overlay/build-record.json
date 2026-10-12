@@ -1,0 +1,44 @@
+{
+  "output": "${WORKSPACE}/ios-network-overlay/PiliPlus_iOS_2.1.6+5472_AV1-v2_NetSpeed_Buf.ipa",
+  "sha256": "2757bc8b46dc7ad49930ff975dbeb636f65dcacb4b3d7e16847f341505ea6fb0",
+  "size_bytes": 24422451,
+  "base": "${WORKSPACE}/ios-build-v2/PiliPlus_iOS_2.1.6+5472_AV1-v2.ipa",
+  "base_sha256": "18e50f71cfe0c43adcaf1f4f3bd4e411ae8d1d0e653a63d6ccf43d01a82d95d3",
+  "checks": {
+    "working_v2_avcodec_byte_identical": true,
+    "original_mpv_code_identical": true,
+    "runner_executable_code_identical": true,
+    "original_mpv_exports_preserved": 54,
+    "other_original_files_byte_identical": 277,
+    "deep_strict_signature": true,
+    "zip_integrity": true,
+    "iphone_installation_tested": false,
+    "iphone_playback_tested": false
+  },
+  "signature": "Ad-hoc integrity only; Sideloadly must sign both Mpv and MpvCore frameworks and provision the app.",
+  "settings": "Settings > Apps > PiliPlus AV1 网速",
+  "scope": "Original mpv binary moved into a separate MpvCore.framework with original executable code intact; Mpv.framework is now a thin API re-export bridge. Working AV1 v2 Avcodec and every other media framework preserved byte-for-byte. Adds Settings.bundle and updates app name/signature.",
+  "overlay_label": "Buf",
+  "host_component_validation": {
+    "controlled_http_read_rate_positive": true,
+    "video_progresses": true,
+    "av1_hardware_decode_preserved": true,
+    "toggle_messages_pass": true,
+    "font_size_messages_pass": true,
+    "four_corner_messages_pass": true,
+    "audio_only_and_local_video_overlay_hidden": true,
+    "test_scope": "Same native iOS bridge source compiled on macOS; not an iPhone runtime test",
+    "preview_size": [
+      1280,
+      720
+    ],
+    "last_snapshot": {
+      "hwdec-current": "videotoolbox-copy",
+      "time-pos": "4.754750",
+      "user-data/piliplus-network/bytes_per_second": "46005.000000",
+      "user-data/piliplus-network/buffered_seconds": "2.168833"
+    }
+  },
+  "native_bridge_sha256": "200df837abb5f1438e5f78d305bce77e79fa851c9ac8a33fce6171b27bf4cade",
+  "change": "Replace Chinese buffer label with ASCII Buf; adjust label width for ASCII glyphs."
+}

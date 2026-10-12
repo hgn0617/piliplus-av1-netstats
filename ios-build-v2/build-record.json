@@ -1,0 +1,39 @@
+{
+  "output": "PiliPlus_iOS_2.1.6+5472_AV1-v2.ipa",
+  "sha256": "18e50f71cfe0c43adcaf1f4f3bd4e411ae8d1d0e653a63d6ccf43d01a82d95d3",
+  "size_bytes": 24411386,
+  "base_release": "https://github.com/bggRGjQaUbCoE/PiliPlus/releases/tag/2.1.6.2",
+  "base_sha256": "6cccd84c5459fbefeef2683659e7dbe3d65a76243862525d24238303d9a341ee",
+  "patch_commit": "https://github.com/FFmpeg/FFmpeg/commit/f9c5c5358cfef3847674c6f3b3ded9611ebc5647",
+  "ffmpeg_source": "https://ffmpeg.org/releases/ffmpeg-7.0.2.tar.xz",
+  "ffmpeg_source_sha256": "8646515b638a3ad303e23af6a3587734447cb8fc0a0c064ecdb8e95c4fd8b389",
+  "backport_patch_sha256": "5e2eeb917442eef35457974cdc7ac285f446cb22209df50999ecfbc7bb33c33c",
+  "avcodec_abi": "61.3.100 (original unchanged ABI)",
+  "dav1d_headers": "1.2.1, matching original framework",
+  "signature": "ad-hoc integrity only; Sideloadly must provision and sign for device",
+  "checks": {
+    "avcodec_exports_preserved": 359,
+    "av1_videotoolbox_compiled": true,
+    "original_files_byte_identical": 277,
+    "runner_executable_text_identical": true,
+    "mpv_byte_identical": true,
+    "avformat_byte_identical": true,
+    "avutil_byte_identical": true,
+    "deep_strict_signature": true,
+    "zip_integrity": true,
+    "patch_component_test_on_mac": {
+      "frames": 64,
+      "hardware_frames": 64,
+      "software_fallback": false
+    },
+    "iphone_installation_tested": false,
+    "iphone_playback_tested": false
+  },
+  "scope": "Only Avcodec.framework executable and its Info.plist changed; app display name and root integrity signature updated (including Runner code-signature data, with executable text unchanged). Other original files preserved byte-for-byte.",
+  "device_feedback": {
+    "date": "2026-10-12",
+    "status": "success",
+    "user_message": "成功了，很好",
+    "note": "User reports the v2 package works; no independent power measurement or playback-info screenshot was collected."
+  }
+}
