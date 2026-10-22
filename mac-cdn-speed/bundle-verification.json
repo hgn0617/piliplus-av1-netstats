@@ -1,0 +1,22 @@
+{
+  "base_version": "2.1.6+5472 / 2.1.6.2",
+  "base_commit": "b2d6a5befb6dd292b9f7ad98794f3620f6dfb818",
+  "flutter_version": "3.47.7",
+  "flutter_engine": "deb287481e3ce9468f3434937ced4240a70539ca",
+  "sample_bytes": 5000000,
+  "wall_clock_limit_seconds": 5,
+  "default_concurrency": 4,
+  "concurrency_choices": [
+    1,
+    4,
+    8,
+    21
+  ],
+  "app_framework_sha256": "b153fe21fa795740a44711efa6c261ed883070a5508cfa0d3fbea6ca27534e3c",
+  "unchanged_files_outside_app_framework": 158,
+  "native_asset_manifest_unchanged": true,
+  "existing_av1_and_overlay_runtime_unchanged": true,
+  "runner_executable_text_unchanged": true,
+  "runner_signature_updated": true,
+  "deep_strict_signature": true
+}

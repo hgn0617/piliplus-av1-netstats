@@ -1,0 +1,623 @@
+diff --git a/lib/pages/setting/widgets/select_dialog.dart b/lib/pages/setting/widgets/select_dialog.dart
+index cde1e1c..225f31f 100644
+--- a/lib/pages/setting/widgets/select_dialog.dart
++++ b/lib/pages/setting/widgets/select_dialog.dart
+@@ -7,6 +7,8 @@ import 'package:PiliPlus/models/common/video/cdn_type.dart';
+ import 'package:PiliPlus/models/common/video/video_quality.dart';
+ import 'package:PiliPlus/models/common/video/video_type.dart';
+ import 'package:PiliPlus/models/video/play/url.dart';
++import 'package:PiliPlus/utils/cdn_speed_test.dart';
++import 'package:PiliPlus/utils/storage.dart';
+ import 'package:PiliPlus/utils/storage_pref.dart';
+ import 'package:PiliPlus/utils/video_utils.dart';
+ import 'package:dio/dio.dart';
+@@ -16,6 +18,7 @@ import 'package:material_ui/material_ui.dart';
+ class SelectDialog<T> extends StatelessWidget {
+   final T? value;
+   final String title;
++  final Widget? titleFooter;
+   final List<(T, String)> values;
+   final Widget Function(BuildContext, int)? subtitleBuilder;
+   final bool toggleable;
+@@ -25,6 +28,7 @@ class SelectDialog<T> extends StatelessWidget {
+     this.value,
+     required this.values,
+     required this.title,
++    this.titleFooter,
+     this.subtitleBuilder,
+     this.toggleable = false,
+   });
+@@ -34,7 +38,13 @@ class SelectDialog<T> extends StatelessWidget {
+     final titleMedium = TextTheme.of(context).titleMedium!;
+     return AlertDialog(
+       clipBehavior: Clip.hardEdge,
+-      title: Text(title),
++      title: titleFooter == null
++          ? Text(title)
++          : Column(
++              crossAxisAlignment: CrossAxisAlignment.start,
++              mainAxisSize: MainAxisSize.min,
++              children: [Text(title), const SizedBox(height: 8), titleFooter!],
++            ),
+       constraints: subtitleBuilder != null
+           ? const BoxConstraints.tightFor(width: 320)
+           : null,
+@@ -85,18 +95,26 @@ class CdnSelectDialog extends StatefulWidget {
+ 
+ class _CdnSelectDialogState extends State<CdnSelectDialog> {
+   late final List<ValueNotifier<String?>> _cdnResList;
+-  late final List<CancelToken?> _tokens;
++  List<CancelToken> _tokens = [];
+   late final bool _cdnSpeedTest;
++  static const _concurrencyKey = 'cdnTestConcurrency';
++  late int _concurrency;
++  int _run = 0;
+ 
+   @override
+   void initState() {
++    super.initState();
+     _cdnSpeedTest = Pref.cdnSpeedTest;
+     if (_cdnSpeedTest) {
++      final saved = GStorage.setting.get(_concurrencyKey, defaultValue: 4);
++      _concurrency = [1, 4, 8, CDNService.values.length].contains(saved)
++          ? saved as int
++          : 4;
+       _dio =
+           Dio(
+               BaseOptions(
+-                connectTimeout: const Duration(seconds: 15),
+-                receiveTimeout: const Duration(seconds: 15),
++                connectTimeout: const Duration(seconds: 5),
++                receiveTimeout: const Duration(seconds: 5),
+               ),
+             )
+             ..options.headers = {
+@@ -106,19 +124,18 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
+       final length = CDNService.values.length;
+       _cdnResList = List.generate(
+         length,
+-        (_) => ValueNotifier<String?>(null),
++        (_) => ValueNotifier<String?>('等待测速'),
+       );
+-      _tokens = List.generate(length, (_) => CancelToken());
+       _startSpeedTest();
+     }
+-    super.initState();
+   }
+ 
+   @override
+   void dispose() {
+     if (_cdnSpeedTest) {
++      _run++;
+       for (final e in _tokens) {
+-        e?.cancel();
++        e.cancel('CDN dialog closed');
+       }
+       for (final notifier in _cdnResList) {
+         notifier.dispose();
+@@ -142,111 +159,133 @@ class _CdnSelectDialogState extends State<CdnSelectDialog> {
+   }
+ 
+   Future<void> _startSpeedTest() async {
+-    try {
+-      final videoItem = widget.sample ?? await _getSampleUrl();
+-      await _testAllCdnServices(videoItem);
+-    } catch (e) {
+-      if (kDebugMode) debugPrint('CDN speed test failed: $e');
++    final run = ++_run;
++    for (final token in _tokens) {
++      token.cancel('CDN test restarted');
+     }
+-  }
+-
+-  Future<void> _testAllCdnServices(BaseItem videoItem) async {
+-    for (final item in CDNService.values) {
+-      if (!mounted) break;
+-      await _testSingleCdn(item, videoItem);
++    final tokens = _tokens = List.generate(
++      CDNService.values.length,
++      (_) => CancelToken(),
++    );
++    for (final notifier in _cdnResList) {
++      notifier.value = '等待测速';
+     }
+-  }
+-
+-  Future<void> _testSingleCdn(CDNService item, BaseItem videoItem) async {
++    bool isActive() => mounted && run == _run;
+     try {
+-      final cdnUrl = VideoUtils.getCdnUrl(
+-        videoItem.playUrls,
+-        defaultCDNService: item,
++      final videoItem =
++          widget.sample ??
++          await _getSampleUrl().timeout(const Duration(seconds: 8));
++      if (!isActive()) return;
++      await runCdnTestQueue(
++        items: CDNService.values,
++        concurrency: _concurrency,
++        isActive: isActive,
++        test: (item) async {
++          final index = item.index;
++          _cdnResList[index].value = '连接中';
++          try {
++            final cdnUrl = VideoUtils.getCdnUrl(
++              videoItem.playUrls,
++              defaultCDNService: item,
++            );
++            final result = await measureCdnSpeed(
++              dio: _dio,
++              url: cdnUrl,
++              cancelToken: tokens[index],
++              onProgress: (sample) {
++                if (isActive()) {
++                  _cdnResList[index].value = '测速中 · ${_formatSpeed(sample)}';
++                }
++              },
++            );
++            if (!isActive()) return;
++            if (result.bytes > 0 || result.end != CdnTestEnd.error) {
++              _cdnResList[index].value = _formatSpeed(result);
++            } else {
++              _showTestError(result.error, index);
++            }
++          } catch (error) {
++            if (isActive()) _showTestError(error, index);
++          }
++        },
+       );
+-      await _measureDownloadSpeed(cdnUrl, item.index);
+     } catch (e) {
+-      _handleSpeedTestError(e, item.index);
++      if (!isActive()) return;
++      for (final notifier in _cdnResList) {
++        notifier.value = '无法获取测试视频，请重试';
++      }
++      if (kDebugMode) debugPrint('CDN speed test failed');
+     }
+   }
+ 
+   late final Dio _dio;
+ 
+-  Future<void> _measureDownloadSpeed(String url, int index) async {
+-    const maxSize = 8 * 1024 * 1024;
+-    int downloaded = 0;
+-
+-    final cancelToken = _tokens[index];
+-    final start = DateTime.now().microsecondsSinceEpoch;
++  String _formatSpeed(CdnSpeedSample sample) =>
++      '${sample.megabytesPerSecond.toStringAsPrecision(3)} MB/s';
+ 
+-    void onClose() {
+-      cancelToken?.cancel();
+-      _tokens[index] = null;
+-    }
+-
+-    await _dio.get(
+-      url,
+-      cancelToken: cancelToken,
+-      onReceiveProgress: (count, total) {
+-        if (!mounted) {
+-          return;
+-        }
+-
+-        final duration = DateTime.now().microsecondsSinceEpoch - start;
+-
+-        downloaded = count;
+-
+-        if (duration > 15000000) {
+-          onClose();
+-          if (downloaded > 0) {
+-            _updateSpeedResult(index, downloaded, duration);
+-            downloaded = 0;
+-          } else {
+-            throw TimeoutException('测速超时');
+-          }
+-        } else if (downloaded >= maxSize) {
+-          onClose();
+-          _updateSpeedResult(index, downloaded, duration);
+-          downloaded = 0;
+-        }
+-      },
+-    );
+-  }
+-
+-  void _updateSpeedResult(int index, int downloaded, int duration) {
+-    final speed = (downloaded / duration).toStringAsPrecision(3);
+-    _cdnResList[index].value = '${speed}MB/s';
++  void _showTestError(Object? error, int index) {
++    final status = error is DioException ? error.response?.statusCode : null;
++    _cdnResList[index].value = status == null
++        ? '连接失败，请重试'
++        : '不可用 · HTTP $status';
+   }
+ 
+-  void _handleSpeedTestError(dynamic error, int index) {
+-    _tokens
+-      ..[index]?.cancel()
+-      ..[index] = null;
+-    final item = _cdnResList[index];
+-    if (item.value != null) return;
+-
+-    if (kDebugMode) debugPrint('CDN speed test error: $error');
+-    if (!mounted) return;
+-    String message;
+-    if (error is DioException) {
+-      final statusCode = error.response?.statusCode;
+-      if (statusCode != null && 400 <= statusCode && statusCode < 500) {
+-        message = '此视频可能无法替换为该CDN';
+-      } else {
+-        message = error.toString();
+-      }
+-    } else {
+-      message = error.toString();
+-    }
+-    if (message.isEmpty) {
+-      message = '测速失败';
+-    }
+-    item.value = message;
++  void _setConcurrency(int value) {
++    if (value == _concurrency) return;
++    setState(() => _concurrency = value);
++    unawaited(GStorage.setting.put(_concurrencyKey, value));
++    _startSpeedTest();
+   }
+ 
+   @override
+   Widget build(BuildContext context) {
+     return SelectDialog<CDNService>(
+       title: 'CDN 设置',
++      titleFooter: _cdnSpeedTest
++          ? Row(
++              children: [
++                Expanded(
++                  child: Text(
++                    '5 MB / 项 · 最长 5 秒',
++                    style: TextTheme.of(context).bodySmall,
++                  ),
++                ),
++                PopupMenuButton<int>(
++                  tooltip: '测速并发数；并发请求会共享带宽',
++                  initialValue: _concurrency,
++                  onSelected: _setConcurrency,
++                  itemBuilder: (_) => [
++                    for (final n in [1, 4, 8, CDNService.values.length])
++                      PopupMenuItem(
++                        value: n,
++                        child: Text(
++                          n == CDNService.values.length
++                              ? '全部并发（$n 项）'
++                              : '$n 项并发${n == 4 ? "（推荐）" : ""}',
++                        ),
++                      ),
++                  ],
++                  child: Padding(
++                    padding: const EdgeInsets.symmetric(vertical: 8),
++                    child: Row(
++                      mainAxisSize: MainAxisSize.min,
++                      children: [
++                        Text(
++                          _concurrency == CDNService.values.length
++                              ? '全部并发'
++                              : '$_concurrency 项并发',
++                          style: TextTheme.of(context).bodySmall?.copyWith(
++                            color: ColorScheme.of(context).primary,
++                          ),
++                        ),
++                        const Icon(Icons.expand_more, size: 16),
++                      ],
++                    ),
++                  ),
++                ),
++              ],
++            )
++          : null,
+       values: CDNService.values.map((i) => (i, i.desc)).toList(),
+       value: VideoUtils.cdnService,
+       subtitleBuilder: _cdnSpeedTest
+diff --git a/lib/utils/cdn_speed_test.dart b/lib/utils/cdn_speed_test.dart
+new file mode 100644
+index 0000000..4cbfde7
+--- /dev/null
++++ b/lib/utils/cdn_speed_test.dart
+@@ -0,0 +1,113 @@
++import 'dart:async';
++import 'dart:math' as math;
++
++import 'package:dio/dio.dart';
++
++enum CdnTestEnd { sizeLimit, timeLimit, endOfStream, error, cancelled }
++
++class CdnSpeedSample {
++  final int bytes;
++  final Duration elapsed;
++  final CdnTestEnd? end;
++  final Object? error;
++
++  const CdnSpeedSample(this.bytes, this.elapsed, {this.end, this.error});
++
++  // Decimal MB/s, consistent with the 5,000,000-byte sample limit.
++  double get megabytesPerSecond =>
++      elapsed.inMicroseconds == 0 ? 0 : bytes / elapsed.inMicroseconds;
++}
++
++/// A streaming sample with a wall-clock deadline including connection time.
++/// The deadline runs independently of incoming data, including stalled streams.
++Future<CdnSpeedSample> measureCdnSpeed({
++  required Dio dio,
++  required String url,
++  required CancelToken cancelToken,
++  void Function(CdnSpeedSample)? onProgress,
++  int maxBytes = 5000000,
++  Duration timeout = const Duration(seconds: 5),
++}) {
++  if (maxBytes <= 0 || timeout <= Duration.zero) {
++    throw ArgumentError('Sample size and timeout must be positive.');
++  }
++  final result = Completer<CdnSpeedSample>();
++  final watch = Stopwatch()..start();
++  StreamSubscription<List<int>>? stream;
++  Timer? deadline;
++  Timer? progress;
++  int received = 0;
++
++  void finish(CdnTestEnd end, [Object? error]) {
++    if (result.isCompleted) return;
++    watch.stop();
++    deadline?.cancel();
++    progress?.cancel();
++    result.complete(
++      CdnSpeedSample(received, watch.elapsed, end: end, error: error),
++    );
++    unawaited(stream?.cancel());
++    if (!cancelToken.isCancelled) cancelToken.cancel('CDN sample finished');
++  }
++
++  deadline = Timer(timeout, () => finish(CdnTestEnd.timeLimit));
++  progress = Timer.periodic(const Duration(milliseconds: 250), (_) {
++    onProgress?.call(CdnSpeedSample(received, watch.elapsed));
++  });
++  unawaited(cancelToken.whenCancel.then((_) => finish(CdnTestEnd.cancelled)));
++
++  Future<void> download() async {
++    try {
++      final response = await dio.get<ResponseBody>(
++        url,
++        cancelToken: cancelToken,
++        options: Options(
++          responseType: ResponseType.stream,
++          headers: {'Range': 'bytes=0-${maxBytes - 1}'},
++        ),
++      );
++      if (result.isCompleted) return;
++      final body = response.data;
++      if (body == null) {
++        finish(CdnTestEnd.error, StateError('Empty response'));
++        return;
++      }
++      stream = body.stream.listen(
++        (chunk) {
++          if (result.isCompleted) return;
++          received = math.min(maxBytes, received + chunk.length);
++          if (received == maxBytes) finish(CdnTestEnd.sizeLimit);
++        },
++        onDone: () => finish(CdnTestEnd.endOfStream),
++        onError: (Object error) => finish(CdnTestEnd.error, error),
++        cancelOnError: true,
++      );
++    } catch (error) {
++      finish(CdnTestEnd.error, error);
++    }
++  }
++
++  unawaited(download());
++  return result.future;
++}
++
++/// Starts the next item as soon as any worker finishes, without batch barriers.
++Future<void> runCdnTestQueue<T>({
++  required List<T> items,
++  required int concurrency,
++  required bool Function() isActive,
++  required Future<void> Function(T) test,
++}) async {
++  if (concurrency <= 0) throw ArgumentError.value(concurrency, 'concurrency');
++  int next = 0;
++  Future<void> worker() async {
++    while (isActive() && next < items.length) {
++      final item = items[next++];
++      await test(item);
++    }
++  }
++
++  await Future.wait(
++    List.generate(math.min(concurrency, items.length), (_) => worker()),
++  );
++}
+diff --git a/tool/verify_cdn_speed_test.dart b/tool/verify_cdn_speed_test.dart
+new file mode 100644
+index 0000000..88b37cf
+--- /dev/null
++++ b/tool/verify_cdn_speed_test.dart
+@@ -0,0 +1,181 @@
++import 'dart:async';
++import 'dart:convert';
++import 'dart:io';
++import 'dart:typed_data';
++
++import 'package:PiliPlus/utils/cdn_speed_test.dart';
++import 'package:dio/dio.dart';
++
++void check(bool condition, String message) {
++  if (!condition) throw StateError(message);
++}
++
++Future<void> main() async {
++  final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
++  final dio = Dio();
++  final ranges = <String, String?>{};
++  server.listen((request) async {
++    ranges[request.uri.path] = request.headers.value('range');
++    final response = request.response;
++    try {
++      switch (request.uri.path) {
++        case '/fast':
++          response.add(Uint8List(5000000));
++        case '/short':
++          response.add(Uint8List(64000));
++        case '/slow':
++          for (int i = 0; i < 70; i++) {
++            response.add(Uint8List(20000));
++            await response.flush();
++            await Future<void>.delayed(const Duration(milliseconds: 100));
++          }
++        case '/stall':
++          response.add(Uint8List(30000));
++          await response.flush();
++          await Future<void>.delayed(const Duration(seconds: 6));
++        case '/silent':
++          await Future<void>.delayed(const Duration(seconds: 6));
++        case '/forbidden':
++          response.statusCode = 403;
++        default:
++          response.statusCode = 404;
++      }
++      await response.close();
++    } catch (_) {
++      // A completed sample intentionally closes the HTTP transfer early.
++    }
++  });
++  String url(String path) => 'http://127.0.0.1:${server.port}$path';
++  final results = <String, Object>{};
++  try {
++    final fast = await measureCdnSpeed(
++      dio: dio,
++      url: url('/fast'),
++      cancelToken: CancelToken(),
++    );
++    check(
++      fast.bytes == 5000000 && fast.end == CdnTestEnd.sizeLimit,
++      'Fast sample must stop at 5 decimal MB.',
++    );
++    check(ranges['/fast'] == 'bytes=0-4999999', 'Range request is bounded.');
++    final short = await measureCdnSpeed(
++      dio: dio,
++      url: url('/short'),
++      cancelToken: CancelToken(),
++    );
++    check(
++      short.bytes == 64000 && short.end == CdnTestEnd.endOfStream,
++      'Short responses must produce a final result.',
++    );
++    int progress = 0;
++    final timed = await Future.wait([
++      measureCdnSpeed(
++        dio: dio,
++        url: url('/slow'),
++        cancelToken: CancelToken(),
++        onProgress: (_) => progress++,
++      ),
++      measureCdnSpeed(dio: dio, url: url('/stall'), cancelToken: CancelToken()),
++      measureCdnSpeed(
++        dio: dio,
++        url: url('/silent'),
++        cancelToken: CancelToken(),
++      ),
++    ]);
++    for (int i = 0; i < timed.length; i++) {
++      final sample = timed[i];
++      check(sample.end == CdnTestEnd.timeLimit, 'Sample $i missed deadline.');
++      check(
++        sample.elapsed.inMilliseconds >= 4850 &&
++            sample.elapsed.inMilliseconds < 5500,
++        'Deadline must be five seconds.',
++      );
++    }
++    check(
++      timed[0].bytes > 200000 && timed[0].bytes < 1400000 && progress >= 16,
++      'Slow download must report live progress and its partial average.',
++    );
++    check(
++      timed[1].bytes == 30000 && timed[1].megabytesPerSecond > 0,
++      'Stalled download must retain bytes for the five-second average.',
++    );
++    check(
++      timed[2].bytes == 0 && timed[2].megabytesPerSecond == 0,
++      'No-response sample must complete with a zero average.',
++    );
++    final forbidden = await measureCdnSpeed(
++      dio: dio,
++      url: url('/forbidden'),
++      cancelToken: CancelToken(),
++    );
++    check(
++      forbidden.end == CdnTestEnd.error &&
++          forbidden.error is DioException &&
++          (forbidden.error! as DioException).response?.statusCode == 403,
++      'HTTP errors must remain distinguishable from a zero download rate.',
++    );
++    final token = CancelToken();
++    final cancelled = measureCdnSpeed(
++      dio: dio,
++      url: url('/slow'),
++      cancelToken: token,
++    );
++    Timer(
++      const Duration(milliseconds: 100),
++      () => token.cancel('Dialog closed'),
++    );
++    final cancelledSample = await cancelled;
++    check(
++      cancelledSample.end == CdnTestEnd.cancelled &&
++          cancelledSample.elapsed.inMilliseconds < 500,
++      'Closing the dialog must cancel active transfers immediately.',
++    );
++
++    for (final limit in [1, 4, 8, 21]) {
++      int active = 0, peak = 0, completed = 0;
++      await runCdnTestQueue(
++        items: List.generate(21, (i) => i),
++        concurrency: limit,
++        isActive: () => true,
++        test: (_) async {
++          active++;
++          if (active > peak) peak = active;
++          await Future<void>.delayed(const Duration(milliseconds: 10));
++          active--;
++          completed++;
++        },
++      );
++      check(peak == limit && completed == 21, 'Incorrect concurrency $limit.');
++    }
++    int started = 0;
++    bool active = true;
++    await runCdnTestQueue(
++      items: List.generate(21, (i) => i),
++      concurrency: 4,
++      isActive: () => active,
++      test: (_) async {
++        started++;
++        await Future<void>.delayed(const Duration(milliseconds: 10));
++        active = false;
++      },
++    );
++    check(started == 4, 'Cancellation must not start queued tests.');
++    results.addAll({
++      'max_bytes': fast.bytes,
++      'deadline_seconds': 5,
++      'slow_partial_bytes': timed[0].bytes,
++      'slow_average_MB_per_second': timed[0].megabytesPerSecond,
++      'stall_partial_bytes': timed[1].bytes,
++      'stall_deadline_ms': timed[1].elapsed.inMilliseconds,
++      'silent_deadline_ms': timed[2].elapsed.inMilliseconds,
++      'live_progress_updates': progress,
++      'short_response_and_http_403': 'passed',
++      'cancel_active_and_queued': 'passed',
++      'concurrency_1_4_8_21': 'passed',
++    });
++    stdout.writeln(const JsonEncoder.withIndent('  ').convert(results));
++  } finally {
++    dio.close(force: true);
++    await server.close(force: true);
++  }
++}

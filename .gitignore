@@ -31,3 +31,4 @@ __pycache__/
 **/检查结果.json
 **/overlay-preview.png
 ios-check/
+mac-cdn-speed/original-entitlements.plist

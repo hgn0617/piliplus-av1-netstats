@@ -26,6 +26,7 @@
 ```text
 tools/                 macOS AV1 库替换与能力探测
 mac-network-overlay/   Mac 原生桥接、Lua 样式、打包和渲染检查
+mac-cdn-speed/         Mac CDN 测速 5 MB / 5 秒、并发与实时进度补丁
 ios-build-v2/          FFmpeg 7.0.2 AV1 VT 回移补丁、ABI 导出清单、构建模板
 ios-network-overlay/   iOS 原生网速桥接、IPA 打包与主机组件检查
 verification/          样本与验证摘要
@@ -36,6 +37,8 @@ licenses/              第三方许可文本
 构建入口见 [docs/BUILD.md](docs/BUILD.md)，验证边界见 [docs/VALIDATION.md](docs/VALIDATION.md)，版本和安装包校验值见 [docs/VERSIONS.md](docs/VERSIONS.md)。构建所需的原版 App/IPA、IINA 和 iOS SDK 由维护者自行取得；源码库不会自动替换 `/Applications` 中的 App，也不会替用户完成设备签名。
 
 ## 维护与更新
+
+2026-10-22 增加 [Mac CDN 测速改进](mac-cdn-speed/README.md)：每项最多 5 MB 或 5 秒，默认 4 项并发，可选全部并发；实时显示测速进度，到时显示已下载数据的平均速度。
 
 官方更新可能覆盖本地库修改。升级基线时，重新检查 libmpv API、FFmpeg ABI、动态库路径、原有文件哈希，以及 AVC/HEVC/AV1 的基础播放和音画输出，再生成新包。不能直接把旧桥接库套到任意新版发行包。
 

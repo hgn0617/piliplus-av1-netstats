@@ -1,0 +1,68 @@
+{
+  "app": "${PATCHED_MAC_APP}",
+  "mpv_client_api_version": 131077,
+  "avcodec_version": "63.1.101",
+  "decoders": {
+    "av1": [
+      {
+        "device": "videotoolbox",
+        "methods": 11
+      }
+    ],
+    "libdav1d": [],
+    "hevc": [
+      {
+        "device": "videotoolbox",
+        "methods": 11
+      }
+    ],
+    "h264": [
+      {
+        "device": "videotoolbox",
+        "methods": 11
+      }
+    ]
+  },
+  "playback": [
+    {
+      "video-codec": "Alliance for Open Media AV1",
+      "video-params": "{\"pixelformat\":\"nv12\",\"average-bpp\":12,\"w\":320,\"h\":176,\"dw\":320,\"dh\":176,\"crop-x\":0,\"crop-y\":0,\"crop-w\":320,\"crop-h\":176,\"aspect\":1.818182,\"par\":1.000000,\"sar\":1.818182,\"colormatrix\":\"bt.601\",\"colorlevels\":\"limited\",\"primaries\":\"bt.709\",\"gamma\":\"bt.1886\",\"sig-peak\":0.000000,\"light\":\"display\",\"chroma-location\":\"mpeg2/4/h264\",\"stereo-in\":\"mono\",\"rotate\":0,\"alpha\":\"none\"}",
+      "hwdec-current": "videotoolbox-copy",
+      "video-dec-params": "{\"pixelformat\":\"nv12\",\"average-bpp\":12,\"w\":320,\"h\":176,\"dw\":320,\"dh\":176,\"crop-x\":0,\"crop-y\":0,\"crop-w\":320,\"crop-h\":176,\"aspect\":1.818182,\"par\":1.000000,\"sar\":1.818182,\"colormatrix\":\"auto\",\"colorlevels\":\"limited\",\"primaries\":\"auto\",\"gamma\":\"auto\",\"sig-peak\":0.000000,\"light\":\"auto\",\"chroma-location\":\"unknown\",\"stereo-in\":\"mono\",\"rotate\":0,\"alpha\":\"none\"}",
+      "decoder-frame-drop-count": "0",
+      "time-pos": "2.502500"
+    },
+    {
+      "video-codec": "Alliance for Open Media AV1",
+      "video-params": "{\"pixelformat\":\"nv12\",\"average-bpp\":12,\"w\":320,\"h\":176,\"dw\":320,\"dh\":176,\"crop-x\":0,\"crop-y\":0,\"crop-w\":320,\"crop-h\":176,\"aspect\":1.818182,\"par\":1.000000,\"sar\":1.818182,\"colormatrix\":\"bt.601\",\"colorlevels\":\"limited\",\"primaries\":\"bt.709\",\"gamma\":\"bt.1886\",\"sig-peak\":0.000000,\"light\":\"display\",\"chroma-location\":\"mpeg2/4/h264\",\"stereo-in\":\"mono\",\"rotate\":0,\"alpha\":\"none\"}",
+      "hwdec-current": "videotoolbox-copy",
+      "video-dec-params": "{\"pixelformat\":\"nv12\",\"average-bpp\":12,\"w\":320,\"h\":176,\"dw\":320,\"dh\":176,\"crop-x\":0,\"crop-y\":0,\"crop-w\":320,\"crop-h\":176,\"aspect\":1.818182,\"par\":1.000000,\"sar\":1.818182,\"colormatrix\":\"auto\",\"colorlevels\":\"limited\",\"primaries\":\"auto\",\"gamma\":\"auto\",\"sig-peak\":0.000000,\"light\":\"auto\",\"chroma-location\":\"unknown\",\"stereo-in\":\"mono\",\"rotate\":0,\"alpha\":\"none\"}",
+      "decoder-frame-drop-count": "0",
+      "time-pos": "2.627625"
+    },
+    {
+      "video-codec": "Alliance for Open Media AV1",
+      "video-params": "{\"pixelformat\":\"nv12\",\"average-bpp\":12,\"w\":320,\"h\":176,\"dw\":320,\"dh\":176,\"crop-x\":0,\"crop-y\":0,\"crop-w\":320,\"crop-h\":176,\"aspect\":1.818182,\"par\":1.000000,\"sar\":1.818182,\"colormatrix\":\"bt.601\",\"colorlevels\":\"limited\",\"primaries\":\"bt.709\",\"gamma\":\"bt.1886\",\"sig-peak\":0.000000,\"light\":\"display\",\"chroma-location\":\"mpeg2/4/h264\",\"stereo-in\":\"mono\",\"rotate\":0,\"alpha\":\"none\"}",
+      "hwdec-current": "videotoolbox-copy",
+      "video-dec-params": "{\"pixelformat\":\"nv12\",\"average-bpp\":12,\"w\":320,\"h\":176,\"dw\":320,\"dh\":176,\"crop-x\":0,\"crop-y\":0,\"crop-w\":320,\"crop-h\":176,\"aspect\":1.818182,\"par\":1.000000,\"sar\":1.818182,\"colormatrix\":\"auto\",\"colorlevels\":\"limited\",\"primaries\":\"auto\",\"gamma\":\"auto\",\"sig-peak\":0.000000,\"light\":\"auto\",\"chroma-location\":\"unknown\",\"stereo-in\":\"mono\",\"rotate\":0,\"alpha\":\"none\"}",
+      "decoder-frame-drop-count": "0",
+      "time-pos": "0.041708"
+    },
+    {
+      "video-codec": "Alliance for Open Media AV1",
+      "video-params": "{\"pixelformat\":\"nv12\",\"average-bpp\":12,\"w\":320,\"h\":176,\"dw\":320,\"dh\":176,\"crop-x\":0,\"crop-y\":0,\"crop-w\":320,\"crop-h\":176,\"aspect\":1.818182,\"par\":1.000000,\"sar\":1.818182,\"colormatrix\":\"bt.601\",\"colorlevels\":\"limited\",\"primaries\":\"bt.709\",\"gamma\":\"bt.1886\",\"sig-peak\":0.000000,\"light\":\"display\",\"chroma-location\":\"mpeg2/4/h264\",\"stereo-in\":\"mono\",\"rotate\":0,\"alpha\":\"none\"}",
+      "hwdec-current": "videotoolbox-copy",
+      "video-dec-params": "{\"pixelformat\":\"nv12\",\"average-bpp\":12,\"w\":320,\"h\":176,\"dw\":320,\"dh\":176,\"crop-x\":0,\"crop-y\":0,\"crop-w\":320,\"crop-h\":176,\"aspect\":1.818182,\"par\":1.000000,\"sar\":1.818182,\"colormatrix\":\"auto\",\"colorlevels\":\"limited\",\"primaries\":\"auto\",\"gamma\":\"auto\",\"sig-peak\":0.000000,\"light\":\"auto\",\"chroma-location\":\"unknown\",\"stereo-in\":\"mono\",\"rotate\":0,\"alpha\":\"none\"}",
+      "decoder-frame-drop-count": "0",
+      "time-pos": "0.125125"
+    },
+    {
+      "video-codec": "Alliance for Open Media AV1",
+      "video-params": "{\"pixelformat\":\"nv12\",\"average-bpp\":12,\"w\":320,\"h\":176,\"dw\":320,\"dh\":176,\"crop-x\":0,\"crop-y\":0,\"crop-w\":320,\"crop-h\":176,\"aspect\":1.818182,\"par\":1.000000,\"sar\":1.818182,\"colormatrix\":\"bt.601\",\"colorlevels\":\"limited\",\"primaries\":\"bt.709\",\"gamma\":\"bt.1886\",\"sig-peak\":0.000000,\"light\":\"display\",\"chroma-location\":\"mpeg2/4/h264\",\"stereo-in\":\"mono\",\"rotate\":0,\"alpha\":\"none\"}",
+      "hwdec-current": "videotoolbox-copy",
+      "video-dec-params": "{\"pixelformat\":\"nv12\",\"average-bpp\":12,\"w\":320,\"h\":176,\"dw\":320,\"dh\":176,\"crop-x\":0,\"crop-y\":0,\"crop-w\":320,\"crop-h\":176,\"aspect\":1.818182,\"par\":1.000000,\"sar\":1.818182,\"colormatrix\":\"auto\",\"colorlevels\":\"limited\",\"primaries\":\"auto\",\"gamma\":\"auto\",\"sig-peak\":0.000000,\"light\":\"auto\",\"chroma-location\":\"unknown\",\"stereo-in\":\"mono\",\"rotate\":0,\"alpha\":\"none\"}",
+      "decoder-frame-drop-count": "0",
+      "time-pos": "0.250250"
+    }
+  ]
+}

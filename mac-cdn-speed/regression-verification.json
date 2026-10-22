@@ -1,0 +1,18 @@
+{
+  "max_bytes": 5000000,
+  "deadline_seconds": 5,
+  "slow_partial_bytes": 980000,
+  "slow_average_MB_per_second": 0.19593009214312335,
+  "stall_partial_bytes": 30000,
+  "stall_deadline_ms": 5002,
+  "silent_deadline_ms": 5002,
+  "live_progress_updates": 19,
+  "short_response_and_http_403": "passed",
+  "cancel_active_and_queued": "passed",
+  "concurrency_1_4_8_21": "passed",
+  "scope": "Controlled local HTTP tests; not a long-term CDN accuracy benchmark",
+  "date": "2026-10-22",
+  "installed_ui_header": "5 MB / 项 · 最长 5 秒",
+  "saved_concurrency_preference_retained": true,
+  "installed_signature_verified": true
+}
