@@ -29,3 +29,5 @@ python3 mac-cdn-speed/build_bundle.py --source-app '/path/to/PiliPlus AV1.app' -
 - 实际 App 验证了 4 项/全部并发、实时/最终读数、菜单、关闭及设置保存。真实 CDN 的短时间测速仅验证功能，不作为线路长期性能结论。
 
 旧 App 保留在本目录 `backup/PiliPlus AV1.app`。应用副本、旧版备份和 SDK 不提交 Git。
+
+本地维护时，完整上游源码统一存放在仓库根目录 `.local-build/PiliPlus/`，Flutter SDK 存放在 `.local-build/flutter/`；该目录仅供本机构建，不提交 Git。

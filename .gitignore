@@ -32,3 +32,4 @@ __pycache__/
 **/overlay-preview.png
 ios-check/
 mac-cdn-speed/original-entitlements.plist
+.local-build/
