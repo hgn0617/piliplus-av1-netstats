@@ -1,0 +1,19 @@
+[
+  "clang",
+  "-dynamiclib",
+  "-target",
+  "arm64-apple-ios15.0",
+  "-isysroot",
+  "/Users/hgn/Downloads/piliplus-av1-netstats/ios-build-v2/sdk-source/iPhoneOS18.5.sdk",
+  "-fobjc-arc",
+  "-O2",
+  "/Users/hgn/Downloads/piliplus-av1-netstats/ios-network-overlay/mpv_network_bridge.m",
+  "-framework",
+  "Foundation",
+  "-Wl,-reexport_library,/Users/hgn/Downloads/piliplus-av1-netstats/ios-network-overlay/staging-flutter-2026/Payload/Runner.app/Frameworks/MpvCore.framework/MpvCore",
+  "-Wl,-install_name,@rpath/Mpv.framework/Mpv",
+  "-Wl,-compatibility_version,2.0.0",
+  "-Wl,-current_version,2.0.0",
+  "-o",
+  "/Users/hgn/Downloads/piliplus-av1-netstats/ios-network-overlay/staging-flutter-2026/Payload/Runner.app/Frameworks/Mpv.framework/Mpv"
+]

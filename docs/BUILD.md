@@ -40,7 +40,24 @@ python3 ios-build-v2/build_ipa.py
 
 修改 FFmpeg 补丁时应使用干净的 7.0.2 源码重新应用，不要对同一目录重复打补丁。链接保留原框架 359 个导出/转发符号，并与原 Avutil、Swresample、Dav1d 连接。
 
-## iOS 网速 Buf 包
+## iOS 完整 AV1、CDN 测速与网速包
+
+当前 iOS 包需要从 `.local-build/PiliPlus` 的 Flutter 源码重编译，才能包含 CDN 测速并发改动。Mac 上需要 CocoaPods；Flutter SDK 放在 `.local-build/flutter`。
+
+```sh
+PATH="$PWD/.local-build/flutter/bin:$PATH" \
+  flutter build ios --release --no-codesign --build-name=2.1.6 --build-number=5472
+python3 ios-network-overlay/build_from_flutter.py \
+  --runner-app .local-build/PiliPlus/build/ios/iphoneos/Runner.app \
+  --stage-name staging-flutter-2026 \
+  --output-name 'PiliPlus_iOS_2.1.6+5472.ipa'
+```
+
+这个入口同时保留 Flutter 源码里的 CDN 测速设置：每项最多 5 MB 或 5 秒，默认 4 项并发，可切换 1、4、8 或全部并发；应用显示名为 `PiliPlus`。构建脚本再叠加已验证的 AV1 VideoToolbox `Avcodec.framework` 和播放器角落网速显示。
+
+`build_from_flutter.py` 从 `.local-build/PiliPlus/build/ios/iphoneos/Runner.app` 开始，生成新的 `MpvCore.framework`、桥接 `Mpv.framework`、Settings.bundle，并对未签名的 Flutter 产物做临时 ad-hoc 签名。实际安装时仍需用自己的 iLoader/Sideloadly 账号签名。
+
+## 旧版 iOS 网速包
 
 先提供上述 v2 IPA 及 iOS SDK。执行：
 
@@ -59,6 +76,6 @@ python3 ios-network-overlay/prepare_host_test.py --source-app /path/to/PiliPlus-
 python3 ios-network-overlay/verify_host_overlay.py
 ```
 
-生成 IPA 后使用自己的 Sideloadly 配置签名安装。最终文件默认使用官方发行包同名的 `PiliPlus_iOS_2.1.6+5472.ipa`。应签名 `Mpv` 与 `MpvCore` 两个 framework，并检查普通 AVC/HEVC 视频音画、AV1 的实际 `hwdec`、旋转/全屏、字号和开关。主机测试不等于真机验证。
+这个旧入口只适合没有 Flutter 构建环境时保留官方主程序的版本；它不包含 iOS CDN 并发测速修改。生成 IPA 后使用自己的 Sideloadly 配置签名安装。应签名 `Mpv` 与 `MpvCore` 两个 framework，并检查普通 AVC/HEVC 视频音画、AV1 的实际 `hwdec`、旋转/全屏、字号和开关。主机测试不等于真机验证。
 
 包内 `UIDeviceFamily` 为 `[1, 2]`，同时声明 iPhone 和 iPad；iPad 可以使用同一 IPA，但需要用自己的证书重新签名和安装，当前构建记录没有替用户完成真机安装。

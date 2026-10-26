@@ -1,0 +1,28 @@
+{
+  "output": "/Users/hgn/Downloads/piliplus-av1-netstats/ios-network-overlay/PiliPlus_iOS_2.1.6+5472.ipa",
+  "sha256": "149bc357d094199db2f240df9e103551a46c210c6edc80b26cf751fabfbd7e97",
+  "size_bytes": 24121633,
+  "source_runner_app": "/Users/hgn/Downloads/piliplus-av1-netstats/.local-build/PiliPlus/build/ios/iphoneos/Runner.app",
+  "source_avcodec": "/Users/hgn/Downloads/piliplus-av1-netstats/ios-build-v2/staging/Payload/Runner.app/Frameworks/Avcodec.framework/Avcodec",
+  "display_name": "PiliPlus",
+  "device_family": [
+    1,
+    2
+  ],
+  "minimum_os": "15.0",
+  "checks": {
+    "flutter_runner_build_included": true,
+    "av1_videotoolbox_framework_included": true,
+    "native_network_overlay_included": true,
+    "deep_strict_signature": true,
+    "zip_integrity": true,
+    "iphone_installation_tested": true,
+    "iphone_playback_tested": false,
+    "parallel_cdn_test_code_compiled": true,
+    "cdn_speed_test_unit_tests_passed": true,
+    "device_runtime_app_name_verified": true
+  },
+  "signature": "Ad-hoc integrity only; iLoader/Sideloadly must sign for the device.",
+  "settings": "Settings > Apps > PiliPlus",
+  "change": "Full Flutter iOS build includes the 5 MB/5 second CDN test with selectable concurrency, original PiliPlus display name, AV1 VideoToolbox Avcodec, and native playback network overlay."
+}

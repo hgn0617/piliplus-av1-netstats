@@ -1,49 +1,28 @@
 {
-  "output": "PiliPlus_iOS_2.1.6+5472.ipa",
-  "sha256": "fd56f11463b77399e2fde0d0b848974f027c181540acde3c329807734864f1c4",
-  "size_bytes": 24421496,
-  "base": "PiliPlus_iOS_2.1.6+5472_AV1-v2.ipa",
-  "base_sha256": "b750d52a63d60a74b6c7412a757b49442448c97ccf74ad237de99dc38a1ce778",
-  "base_release_sha256": "6cccd84c5459fbefeef2683659e7dbe3d65a76243862525d24238303d9a341ee",
-  "checks": {
-    "working_v2_avcodec_byte_identical": true,
-    "original_mpv_code_identical": true,
-    "runner_executable_code_identical": true,
-    "original_mpv_exports_preserved": 54,
-    "other_original_files_byte_identical": 277,
-    "deep_strict_signature": true,
-    "zip_integrity": true,
-    "iphone_installation_tested": false,
-    "iphone_playback_tested": false
-  },
+  "output": "/Users/hgn/Downloads/piliplus-av1-netstats/ios-network-overlay/PiliPlus_iOS_2.1.6+5472.ipa",
+  "sha256": "149bc357d094199db2f240df9e103551a46c210c6edc80b26cf751fabfbd7e97",
+  "size_bytes": 24121633,
+  "source_runner_app": "/Users/hgn/Downloads/piliplus-av1-netstats/.local-build/PiliPlus/build/ios/iphoneos/Runner.app",
+  "source_avcodec": "/Users/hgn/Downloads/piliplus-av1-netstats/ios-build-v2/staging/Payload/Runner.app/Frameworks/Avcodec.framework/Avcodec",
+  "display_name": "PiliPlus",
   "device_family": [
     1,
     2
   ],
   "minimum_os": "15.0",
-  "display_name": "PiliPlus AV1 网速",
-  "signature": "Ad-hoc integrity only; Sideloadly must sign both Mpv and MpvCore frameworks and provision the app.",
-  "settings": "Settings > Apps > PiliPlus AV1 网速",
-  "overlay_label": "Buf",
-  "host_component_validation": {
-    "controlled_http_read_rate_positive": true,
-    "video_progresses": true,
-    "av1_hardware_decode_preserved": true,
-    "toggle_messages_pass": true,
-    "font_size_messages_pass": true,
-    "four_corner_messages_pass": true,
-    "audio_only_and_local_video_overlay_hidden": true,
-    "test_scope": "Same native iOS bridge source compiled on macOS; not an iPhone/iPad runtime test",
-    "preview_size": [
-      1280,
-      720
-    ],
-    "last_snapshot": {
-      "hwdec-current": "videotoolbox-copy",
-      "time-pos": "4.754750",
-      "bytes_per_second": "46005.000000",
-      "buffered_seconds": "2.168833"
-    }
+  "checks": {
+    "flutter_runner_build_included": true,
+    "av1_videotoolbox_framework_included": true,
+    "native_network_overlay_included": true,
+    "deep_strict_signature": true,
+    "zip_integrity": true,
+    "iphone_installation_tested": true,
+    "iphone_playback_tested": false,
+    "parallel_cdn_test_code_compiled": true,
+    "cdn_speed_test_unit_tests_passed": true,
+    "device_runtime_app_name_verified": true
   },
-  "change": "Rebuilt from official 2.1.6.2 IPA with AV1 VideoToolbox Avcodec, then added native Buf network overlay; final filename uses official release naming."
+  "signature": "Ad-hoc integrity only; iLoader/Sideloadly must sign for the device.",
+  "settings": "Settings > Apps > PiliPlus",
+  "change": "Full Flutter iOS build includes the 5 MB/5 second CDN test with selectable concurrency, original PiliPlus display name, AV1 VideoToolbox Avcodec, and native playback network overlay."
 }
