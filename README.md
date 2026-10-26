@@ -8,7 +8,7 @@
 
 | 组件 | 实现 | 验证范围 |
 | --- | --- | --- |
-| macOS AV1 | 独立 App 副本采用 IINA 1.5.0 的 mpv 0.41 / FFmpeg 9.0.1 及其依赖 | M4 Mac 实际 8K AV1 播放信息显示 VideoToolbox；本地解码测试通过 |
+| macOS AV1 | 稳定版和上游 main 版分别保留；main 版基于 PiliPlus `72ec31e` 重编译 Flutter 主程序，再接入已验证的 AV1 运行库和网速桥接 | main 版本地 AV1 播放显示 `videotoolbox-copy`；视频推进、网速显示开关、字号和四角位置测试通过 |
 | iOS AV1 与 CDN 测速 | 从 Flutter 源码重编译 iOS 主程序，加入 5 MB / 5 秒 CDN 测速、1/4/8/全部并发，再叠加 AV1 VideoToolbox 和播放网速显示 | iPhone 已通过 iLoader 安装验证；CDN 测速单元测试通过；播放和真机 AV1 hwdec 仍需实际检查 |
 | Mac 网速显示 | libmpv 初始化桥接 + Lua ASS 叠加层 | 实际 App 显示、开关、字号已检查；四角位置、HTTP 读取速度等组件测试通过 |
 | iOS 网速显示 | 原版 mpv API 桥接，直接使用 osd-overlay，无需 Lua | 已随完整 Flutter 重编译包安装到 iPhone；设置项位于“设置 → 应用 → PiliPlus” |

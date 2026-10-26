@@ -31,3 +31,19 @@ python3 mac-cdn-speed/build_bundle.py --source-app '/path/to/PiliPlus AV1.app' -
 旧 App 保留在本目录 `backup/PiliPlus AV1.app`。应用副本、旧版备份和 SDK 不提交 Git。
 
 本地维护时，完整上游源码统一存放在仓库根目录 `.local-build/PiliPlus/`，Flutter SDK 存放在 `.local-build/flutter/`；该目录仅供本机构建，不提交 Git。
+
+## 基于上游 main 的 Mac 构建
+
+上游 `main` 使用独立目录 `.local-build/PiliPlus-main/` 和 Flutter 3.47.8 构建。最新 `main` 已将 `video_quality.dart` 改为 `base_quality.dart`，因此 CDN 补丁需要使用对应的新导入上下文。
+
+完整 Mac App 编译完成后，用已验证的 AV1 App 中的 `MpvCore` 和 `AV1Runtime` 重新生成桥接框架：
+
+```sh
+python3 mac-network-overlay/build_from_latest.py \
+  --source-app .local-build/PiliPlus-main/build/macos/Build/Products/Release/PiliPlus.app \
+  --runtime-app '/Applications/PiliPlus AV1.app' \
+  --output 'mac-cdn-speed/PiliPlus AV1 main.app' \
+  --upstream-commit 72ec31edd6b34883f13ba8caf4e4d76e548ce884
+```
+
+脚本保留最新 Flutter 主程序和原生资源，接入已验证的 AV1 运行库与网速桥接，并检查 mpv C API、双架构、签名和依赖。输出作为独立 App 保存，方便与稳定版并行比较。

@@ -1,0 +1,22 @@
+[
+  "clang",
+  "-dynamiclib",
+  "-arch",
+  "arm64",
+  "-arch",
+  "x86_64",
+  "-mmacosx-version-min=11.0",
+  "-fobjc-arc",
+  "-O2",
+  "/Users/hgn/Downloads/piliplus-av1-netstats/mac-network-overlay/mpv_overlay_bridge.m",
+  "-framework",
+  "AppKit",
+  "-framework",
+  "Foundation",
+  "-Wl,-reexport_library,/Users/hgn/Downloads/piliplus-av1-netstats/mac-cdn-speed/PiliPlus AV1 main.app/Contents/Frameworks/Mpv.framework/Versions/A/MpvCore",
+  "-Wl,-install_name,@rpath/Mpv.framework/Versions/A/Mpv",
+  "-Wl,-compatibility_version,2.0.0",
+  "-Wl,-current_version,2.0.0",
+  "-o",
+  "/Users/hgn/Downloads/piliplus-av1-netstats/mac-cdn-speed/PiliPlus AV1 main.app/Contents/Frameworks/Mpv.framework/Versions/A/Mpv"
+]

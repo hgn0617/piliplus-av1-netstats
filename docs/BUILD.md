@@ -25,6 +25,20 @@ python3 mac-network-overlay/verify_overlay.py
 
 输出位于 `mac-network-overlay/PiliPlus AV1.app`，不会自动安装。修改样式可编辑 `network_overlay.lua` 后重新运行 rebuild；原生菜单位于 `mpv_overlay_bridge.m`。
 
+## 基于上游 main 的 Mac 版本
+
+当前 main 版使用独立源码目录 `.local-build/PiliPlus-main`、Flutter 3.47.8 和独立依赖解析。完整编译成功后，执行：
+
+```sh
+python3 mac-network-overlay/build_from_latest.py \
+  --source-app .local-build/PiliPlus-main/build/macos/Build/Products/Release/PiliPlus.app \
+  --runtime-app '/Applications/PiliPlus AV1.app' \
+  --output 'mac-cdn-speed/PiliPlus AV1 main.app' \
+  --upstream-commit 72ec31edd6b34883f13ba8caf4e4d76e548ce884
+```
+
+它保留最新 main 的 Flutter 主程序和原生资源，再接入已验证的 AV1 运行库与播放器网速桥接。生成的 App 与稳定版分开保存；当前 main 版已经通过本地 AV1 VideoToolbox、视频推进、网速显示开关、字号和四角位置检查，但还没有完成长时间真实 CDN 播放回归。
+
 ## iOS AV1 v2
 
 把官方 IPA 放到 `ios-check/PiliPlus_ios_2.1.6+5472.ipa`。准备脚本会校验固定 SHA-256，提取原框架、下载 FFmpeg 7.0.2、应用回移补丁并生成本机配置。

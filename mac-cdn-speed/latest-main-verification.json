@@ -1,0 +1,17 @@
+{
+  "output": "/Users/hgn/Downloads/piliplus-av1-netstats/mac-cdn-speed/PiliPlus AV1 main.app",
+  "upstream_commit": "72ec31edd6b34883f13ba8caf4e4d76e548ce884",
+  "flutter_engine": "cf636b1dfb818dd6a3ff16e390e93b1a036969c8",
+  "source_flutter_app_sha256": "f73c00bcb14cfc586ed225c67b6aee4dc49cb050bea46e94b2a09d23cf3d13ea",
+  "runtime_core_sha256": "81ef5197c72ad0b85ea399087daeb1016a625edec60d7fd7efe55bbf91c88613",
+  "native_runtime_libraries": 43,
+  "mpv_api_symbols_preserved": 53,
+  "display_name": "PiliPlus AV1",
+  "deep_strict_signature": true,
+  "cdn_speed_test_source_rebuilt": true,
+  "av1_runtime_reused_from_verified_app": true,
+  "mac_runtime_playback_tested": true,
+  "overlay_verification": "mac-network-overlay/verification.json",
+  "installed_to": "/Applications/PiliPlus AV1.app",
+  "stable_backup": "mac-cdn-speed/backup/PiliPlus AV1.app"
+}
