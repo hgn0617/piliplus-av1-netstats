@@ -60,14 +60,19 @@ python3 ios-build-v2/build_ipa.py
 
 ```sh
 PATH="$PWD/.local-build/flutter/bin:$PATH" \
-  flutter build ios --release --no-codesign --build-name=2.1.6 --build-number=5472
+  flutter build ios --release --no-codesign \
+  --build-name=2.1.6 --build-number=5472 \
+  --dart-define=pili.name=2.1.6 \
+  --dart-define=pili.code=5472 \
+  --dart-define=pili.hash="$(git -C .local-build/PiliPlus rev-parse HEAD)" \
+  --dart-define=pili.time="$(date +%s)"
 python3 ios-network-overlay/build_from_flutter.py \
   --runner-app .local-build/PiliPlus/build/ios/iphoneos/Runner.app \
   --stage-name staging-flutter-2026 \
   --output-name 'PiliPlus_iOS_2.1.6+5472.ipa'
 ```
 
-这个入口同时保留 Flutter 源码里的 CDN 测速设置：每项最多 5 MB 或 5 秒，默认 4 项并发，可切换 1、4、8 或全部并发；应用显示名为 `PiliPlus`。构建脚本再叠加已验证的 AV1 VideoToolbox `Avcodec.framework` 和播放器角落网速显示。
+这个入口同时保留 Flutter 源码里的 CDN 测速设置：每项最多 5 MB 或 5 秒，默认 4 项并发，可切换 1、4、8 或全部并发；应用显示名为 `PiliPlus`。四个 `pili.*` 编译参数也必须传入，否则 `BuildConfig.buildTime` 会默认为 0，启动时会错误地提示“发现新版本”。构建脚本再叠加已验证的 AV1 VideoToolbox `Avcodec.framework` 和播放器角落网速显示。
 
 `build_from_flutter.py` 从 `.local-build/PiliPlus/build/ios/iphoneos/Runner.app` 开始，生成新的 `MpvCore.framework`、桥接 `Mpv.framework`、Settings.bundle，并对未签名的 Flutter 产物做临时 ad-hoc 签名。实际安装时仍需用自己的 iLoader/Sideloadly 账号签名。
 

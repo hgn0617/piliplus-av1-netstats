@@ -1,12 +1,12 @@
 # 本地构建版本
 
-基线：PiliPlus `2.1.6+5472`，上游 Release 标签 `2.1.6.2`。
+基线：PiliPlus `2.1.6+5472`，上游 Release 标签 `2.1.6.2`。Release 标签是上游发布标识，iOS 的 `CFBundleShortVersionString` 仍为 `2.1.6`；更新检查实际比较 `BuildConfig.buildTime` 与 GitHub Release 创建时间。
 
 | 版本 | 变化 | SHA-256 |
 | --- | --- | --- |
 | iOS AV1 v2 | 仅回移 FFmpeg AV1 VT 并替换 Avcodec；用户已反馈可播放 | `18e50f71cfe0c43adcaf1f4f3bd4e411ae8d1d0e653a63d6ccf43d01a82d95d3` |
 | iOS NetSpeed Buf（旧版主程序） | 增加原生网速/缓冲叠加层及系统设置入口；主程序仍为官方预编译 Flutter 包 | `fd56f11463b77399e2fde0d0b848974f027c181540acde3c329807734864f1c4` |
-| iOS 完整版 | Flutter 主程序包含 5 MB / 5 秒 CDN 测速、1/4/8/全部并发；应用显示名为 `PiliPlus`，并叠加 AV1 VT 与播放网速显示 | `149bc357d094199db2f240df9e103551a46c210c6edc80b26cf751fabfbd7e97` |
+| iOS 完整版（最新 main，更新检查参数已补齐） | Flutter 主程序包含 5 MB / 5 秒 CDN 测速、1/4/8/全部并发；应用显示名为 `PiliPlus`，并叠加 AV1 VT 与播放网速显示 | `d18171c4d3332025be20ed6069f5b00a36b2bd642839719e49cc402a2c4c2432` |
 
 上述为已有本地构建的哈希。重新签名、重新压缩或在不同工具链下重建会改变最终 IPA 哈希；构建脚本会输出当前包的检查记录。当前 iPhone 已安装并验证新版 IPA 的应用名为 `PiliPlus`，播放功能仍需在设备上实际检查。
 

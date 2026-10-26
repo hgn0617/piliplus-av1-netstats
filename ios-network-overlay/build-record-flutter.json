@@ -1,8 +1,8 @@
 {
   "output": "/Users/hgn/Downloads/piliplus-av1-netstats/ios-network-overlay/PiliPlus_iOS_2.1.6+5472.ipa",
-  "sha256": "149bc357d094199db2f240df9e103551a46c210c6edc80b26cf751fabfbd7e97",
-  "size_bytes": 24121633,
-  "source_runner_app": "/Users/hgn/Downloads/piliplus-av1-netstats/.local-build/PiliPlus/build/ios/iphoneos/Runner.app",
+  "sha256": "d18171c4d3332025be20ed6069f5b00a36b2bd642839719e49cc402a2c4c2432",
+  "size_bytes": 24677801,
+  "source_runner_app": "/Users/hgn/Downloads/piliplus-av1-netstats/.local-build/PiliPlus-main/build/ios/iphoneos/Runner.app",
   "source_avcodec": "/Users/hgn/Downloads/piliplus-av1-netstats/ios-build-v2/staging/Payload/Runner.app/Frameworks/Avcodec.framework/Avcodec",
   "display_name": "PiliPlus",
   "device_family": [
@@ -12,17 +12,27 @@
   "minimum_os": "15.0",
   "checks": {
     "flutter_runner_build_included": true,
+    "parallel_cdn_test_code_compiled": true,
+    "cdn_speed_test_unit_tests_passed": true,
     "av1_videotoolbox_framework_included": true,
     "native_network_overlay_included": true,
     "deep_strict_signature": true,
     "zip_integrity": true,
-    "iphone_installation_tested": true,
+    "iphone_installation_tested": false,
     "iphone_playback_tested": false,
-    "parallel_cdn_test_code_compiled": true,
-    "cdn_speed_test_unit_tests_passed": true,
-    "device_runtime_app_name_verified": true
+    "ipad_installation_tested": false,
+    "update_check_build_time_defined": true
   },
   "signature": "Ad-hoc integrity only; iLoader/Sideloadly must sign for the device.",
   "settings": "Settings > Apps > PiliPlus",
-  "change": "Full Flutter iOS build includes the 5 MB/5 second CDN test with selectable concurrency, original PiliPlus display name, AV1 VideoToolbox Avcodec, and native playback network overlay."
+  "change": "Full Flutter iOS build includes the 5 MB/5 second CDN test with selectable concurrency, original PiliPlus display name, AV1 VideoToolbox Avcodec, and native playback network overlay. BuildConfig version/time/hash defines are populated so the upstream update check does not report a false update.",
+  "source_commit": "72ec31edd6b34883f13ba8caf4e4d76e548ce884",
+  "flutter_sdk": "3.47.8",
+  "flutter_engine": "cf636b1dfb818dd6a3ff16e390e93b1a036969c8",
+  "dart_defines": {
+    "pili.name": "2.1.6",
+    "pili.code": "5472",
+    "pili.hash": "72ec31edd6b34883f13ba8caf4e4d76e548ce884",
+    "pili.time": 1793026168
+  }
 }
