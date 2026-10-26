@@ -45,7 +45,7 @@ python3 ios-build-v2/build_ipa.py
 先提供上述 v2 IPA 及 iOS SDK。执行：
 
 ```sh
-python3 ios-network-overlay/build_ipa.py --stage-name staging-buf --output-name 'PiliPlus_iOS_2.1.6+5472_AV1-v2_NetSpeed_Buf.ipa'
+python3 ios-network-overlay/build_ipa.py --stage-name staging-buf --output-name 'PiliPlus_iOS_2.1.6+5472.ipa' --base-sha256 <已验证的 AV1 v2 IPA SHA-256>
 ```
 
 当前脚本固定校验本次成功 v2 IPA 的 SHA-256，因此别的工具链重建 v2 后，需要**先核对 ABI 和播放结果，再显式更新基线哈希**。这项校验不应为了通过打包而盲目跳过。
@@ -59,4 +59,6 @@ python3 ios-network-overlay/prepare_host_test.py --source-app /path/to/PiliPlus-
 python3 ios-network-overlay/verify_host_overlay.py
 ```
 
-生成 IPA 后使用自己的 Sideloadly 配置签名安装。应签名 `Mpv` 与 `MpvCore` 两个 framework，并检查普通 AVC/HEVC 视频音画、AV1 的实际 `hwdec`、旋转/全屏、字号和开关。主机测试不等于真机验证。
+生成 IPA 后使用自己的 Sideloadly 配置签名安装。最终文件默认使用官方发行包同名的 `PiliPlus_iOS_2.1.6+5472.ipa`。应签名 `Mpv` 与 `MpvCore` 两个 framework，并检查普通 AVC/HEVC 视频音画、AV1 的实际 `hwdec`、旋转/全屏、字号和开关。主机测试不等于真机验证。
+
+包内 `UIDeviceFamily` 为 `[1, 2]`，同时声明 iPhone 和 iPad；iPad 可以使用同一 IPA，但需要用自己的证书重新签名和安装，当前构建记录没有替用户完成真机安装。

@@ -18,7 +18,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 parser = argparse.ArgumentParser()
 parser.add_argument('--stage-name', default='staging')
-parser.add_argument('--output-name', default='PiliPlus_iOS_2.1.6+5472_AV1-v2_NetSpeed.ipa')
+parser.add_argument('--output-name', default='PiliPlus_iOS_2.1.6+5472.ipa')
+parser.add_argument(
+    '--base-sha256',
+    default='18e50f71cfe0c43adcaf1f4f3bd4e411ae8d1d0e653a63d6ccf43d01a82d95d3',
+    help='SHA-256 of the already verified AV1 v2 IPA; required when rebuilding it with a new toolchain.',
+)
 args = parser.parse_args()
 BASE = ROOT.parent / 'ios-build-v2'
 SOURCE = BASE / 'PiliPlus_iOS_2.1.6+5472_AV1-v2.ipa'
@@ -50,7 +55,10 @@ def exports(path):
     return set(re.findall(r'^\s+(?:0x[0-9A-Fa-f]+|\[re-export\])\s+(_\S+)', run('xcrun', 'dyld_info', '-exports', str(path)), re.M))
 
 
-assert sha(SOURCE) == '18e50f71cfe0c43adcaf1f4f3bd4e411ae8d1d0e653a63d6ccf43d01a82d95d3'
+assert sha(SOURCE) == args.base_sha256, (
+    f'Base IPA hash mismatch: expected {args.base_sha256}, got {sha(SOURCE)}. '
+    'Verify the AV1 v2 package before adding the overlay.'
+)
 assert not STAGE.exists(), 'Keep existing staging intact; use a new work directory to rebuild.'
 with zipfile.ZipFile(SOURCE) as archive:
     assert archive.testzip() is None

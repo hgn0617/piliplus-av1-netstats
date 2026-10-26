@@ -19,6 +19,7 @@
 
 - Mac：应用菜单 **PiliPlus AV1 → 显示网速与缓冲**；快捷键 **Shift + Command + N**。同一菜单可以调四档字号和四角位置。
 - iPhone：系统 **设置 → 应用 → PiliPlus AV1 网速**，可以调开关、字号、位置。IPA 需使用自己的 Sideloadly 配置签名安装。
+- iPad：IPA 声明同时支持 iPhone/iPad（`UIDeviceFamily = [1, 2]`），可用同样的签名方式安装；当前没有把包直接安装到 iPad。
 - 显示采用紧凑纯文字和细描边，没有灰色背景。iOS 使用 `Buf 12.3s`。
 
 ## 仓库目录
